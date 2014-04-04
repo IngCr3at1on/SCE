@@ -22,11 +22,10 @@ Used for concept testing.
 
 #include <iostream>
 
-#include "../lib/sce/SCEEval.hpp"
-#include "../lib/sce/SCESocket.hpp"
+#include "../lib/SCEEval.hpp"
+#include "../lib/SCESocket.hpp"
 
 bool running;
-bool socket_initialized;
 SCEEval _eval;
 SCESocket _socket;
 

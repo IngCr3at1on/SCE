@@ -1,4 +1,4 @@
-# <Nathan Bass>. Copyright (C) <2014(s)>. <MIT>.
+# <Nathan Bass>. Copyright (C) <2014(s)>. <GPLv2>.
 
 #
 # Project Properties
