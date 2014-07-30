@@ -17,8 +17,8 @@
  */
 /*******************************************************************************
 Split a string into tokens based on a delimeter
-	This has been pulled from https://github.com/Fredi/IRCClient for use in
-	other applications.
+	This has been separated from it's codebase (below) for easier usage.
+		https://github.com/Fredi/IRCClient
 *******************************************************************************/
 
 #include <string>
