@@ -29,13 +29,7 @@ command or part of a conversation.
 #include <thread>
 
 #include "SCEEval.hpp"
-
-// These they will be removed.
-const char *nick = "sce";
-const char *real = "SCE, Smart Chat Entity";
-const char *host = "irc.freenode.org";
-
-int port = 6667;
+#include "../include/utils/utils.hpp"
 
 bool SCEEval::read_input(std::string data, SCESocket& _socket, enum socket_type sock_type) {
 	if(sock_type == IRC)
@@ -62,7 +56,12 @@ bool SCEEval::handle_command(
 	if(cmd[0] == '.')
 		// This is a command so remove the '.'
 		cmd.erase(0,1);
-	else return true;
+	else {
+		if(sock_type == NONE)
+			_cmd.handle_command(cmd, origin, user, _socket, sock_type);
+
+		return true;
+	}
 
 	/* Chop the end off of our command for a more assured match on
 	 * non-argumental commands. */
@@ -71,12 +70,6 @@ bool SCEEval::handle_command(
 		clip(cmd);
 	else
 		cmd = "";
-
-	// Keep in alpha!
-	if(command.compare("connect") == 0) {
-		if(sock_type == NONE)
-			_socket.irc_connect(host, port, nick, real);
-	}
 
 	if(command.compare("exit") == 0) {
 		if(sock_type != NONE) {
@@ -95,25 +88,7 @@ bool SCEEval::handle_command(
 		return false;
 	}
 
-	if(command.compare("IRC") == 0)
-		return _irceval.handle_command(cmd, origin, user, _socket, sock_type);
-
-	if(command.compare("help") == 0)
-		_cmdhelp.CommandCall(cmd, origin, user, _socket, sock_type);
-
-	if(command.compare("source") == 0)
-		_cmdsrc.CommandCall(origin, user, _socket, sock_type);
-
-	if(command.compare("quit") == 0) {
-		if(sock_type != NONE) {
-			if(user.compare(_socket.admin) != 0) {
-				_socket.IRCSendMsg(user, admin_only);
-				return true;
-			}
-		}
-		_socket.IRCQuit(cmd);
-	}
-
+	_cmd.handle_command(command, origin, user, _socket, sock_type);
 	return true;
 }
 

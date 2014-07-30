@@ -29,18 +29,13 @@ command or part of a conversation.
 #include "SCESocket.hpp"
 #include "IRCEval.hpp"
 
-#include "Commands/SCECommandSource.hpp"
-#include "Commands/SCECommandHelp.hpp"
+#include "Commands/SCECommands.hpp"
 
 class SCEEval {
 	public:
 		bool read_input(std::string /*data*/, SCESocket& /*_socket*/, enum socket_type /*sock_type*/);
 
 	private:
-		IRCEval _irceval;
-		SCECommandSource _cmdsrc;
-		SCECommandHelp _cmdhelp;
-
 		bool handle_command(
 			std::string /*cmd*/,
 			std::string /*origin*/,
@@ -48,6 +43,8 @@ class SCEEval {
 			SCESocket& /*_socket*/, 
 			enum socket_type /*sock_type*/
 		);
+		IRCEval _irceval;
+		SCECommands _cmd;
 
 		bool handle_irc(std::string /*data*/, SCESocket& /*_socket*/);
 		

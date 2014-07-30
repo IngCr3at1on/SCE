@@ -19,46 +19,55 @@ SCE (Smart Chat Entity, pronounced C).
 
 Used for concept testing.
 ********************************************************************************
-Help.
+SCECommands, manage all commands (non-socket specific) from within here.
 *******************************************************************************/
 
-#ifndef _SCECOMMANDHELP_H_
-#define _SCECOMMANDHELP_H_
+#ifndef _SCECOMMANDS_H_
+#define _SCECOMMANDS_H_
 
 #include "SCECommand.hpp"
+#include "SCECommandSource.hpp"
 
-class SCECommandHelp : public SCECommand {
+#include "IRCCommandJoin.hpp"
+
+class SCECommands : public SCECommand {
 	public:
-		SCECommandHelp() {
+		SCECommands() {
 			HelpMsg = "No user commands at this time.";
-			AdmHelpMsg = "Current supported commands are:\nIRC join and quit.";
-			ConsoleHelpMsg = "connect and exit are also supported locally in console.";
+			AdmHelpMsg = "Current supported commands are:\nIRC command group; join, quit.";
+			ConsoleHelpMsg = "connect and exit.";
 		}
 
-		// Main call for all SCECommands.
-		void CommandCall(
+		void handle_command(
 			std::string /*cmd*/,
 			std::string /*origin*/,
 			std::string /*user*/,
 			SCESocket& /*_socket*/,
 			enum socket_type /*sock_type*/
 		);
+
 	private:
 		std::string ConsoleHelpMsg;
 
-		void HelpMain(
-			std::string dest,
-			std::string user,
-			SCESocket& _socket,
-			enum socket_type sock_type
+		std::string handle_irc_command(
+			std::string /*cmd*/,
+			std::string /*dest*/,
+			std::string /*user*/,
+			SCESocket& /*_socket*/,
+			enum socket_type /*sock_type*/
 		);
-		void HelpCommand(
-			std::string cmd,
-			std::string dest,
-			std::string user,
-			SCESocket& _socket,
-			enum socket_type sock_type
+
+		void Help(
+			std::string /*cmd*/,
+			std::string /*dest*/,
+			std::string /*user*/,
+			SCESocket& /*_socket*/,
+			enum socket_type /*sock_type*/
 		);
+
+		SCECommandSource _cmdsrc;
+
+		IRCCommandJoin _ircjoin;
 };
 
-#endif // _SCECOMMANDHELP_H_
+#endif // _SCECOMMANDS_H_

@@ -29,21 +29,9 @@ IRC message evaluation
 #include "IRCMessage.hpp"
 #include "SCESocket.hpp"
 
-#include "Commands/IRCCommandJoin.hpp"
-
 class IRCEval {
 	public:
 		IRCMessage Parse(std::string /*data*/, SCESocket& /*_socket*/);
-
-		bool handle_command(
-			std::string /*cmd*/,
-			std::string /*origin*/,
-			std::string /*user*/,
-			SCESocket& /*_socket*/,
-			enum socket_type /*sock_type*/
-		);
-	private:
-		IRCCommandJoin _join;
 };
 
 #endif // _IRCEVAL_H

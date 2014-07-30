@@ -28,7 +28,6 @@ IRC message evaluation
 #include <string>
 
 #include "IRCEval.hpp"
-#include "../include/utils/clip.hpp"
 
 IRCMessage IRCEval::Parse(std::string data, SCESocket& _socket) {
 	std::string original(data);
@@ -81,31 +80,4 @@ IRCMessage IRCEval::Parse(std::string data, SCESocket& _socket) {
 	IRCMessage ircMessage(command, cmdPrefix, parameters);
 
 	return ircMessage;
-}
-
-/* Quit and Exit commands are already evaluated in SCEEval so this will always
- * return true (never ender the bot from here). */
-bool IRCEval::handle_command(
-	std::string cmd,
-	std::string origin,
-	std::string user,
-	SCESocket& _socket,
-	enum socket_type sock_type
-	)
-{
-	std::string admin_only = "This command is for admins only.";
-
-	/* Chop the end off of our command for a more assured match on
-	 * non-argumental commands. */
-	std::string command = cmd.substr(0, cmd.find(" "));
-	if(cmd.find(" ") != std::string::npos)
-		clip(cmd);
-	else
-		cmd = "";
-
-	// Keep in alpha!
-	if(command.compare("join") == 0)
-		_join.CommandCall(cmd, origin, user, _socket, sock_type);
-
-	return true;
 }
