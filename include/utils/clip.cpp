@@ -1,6 +1,9 @@
 /*
  Copyright (C) 2014 Nathan Bass <https://github.com/IngCr3at1on>
- 
+
+ This source file is free software, under either the MIT or a GPL v2 style
+ license:
+
  MIT License (MIT):
  Permission is hereby granted, free of charge, to any person
  obtaining a copy of this software and associated documentation
