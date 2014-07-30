@@ -21,43 +21,49 @@ Used for concept testing.
 *******************************************************************************/
 
 #include <iostream>
+#include <thread>
 
 #include "../lib/SCEEval.hpp"
 #include "../lib/SCESocket.hpp"
 
-bool running;
-SCEEval _eval;
-SCESocket _socket;
+#include "../include/rlutil/rlutil.h"
 
-void *listen_console(void *dummy) {
+static bool running;
+static SCEEval _eval;
+static SCESocket _socket;
+
+void listen_console() {
 	std::string input;
-	std::cout << "# ";
+	rlutil::setColor(rlutil::GREEN);
+	std::cout << "SCE # ";
+	rlutil::showcursor();
 	getline(std::cin, input);
 	if(!input.empty())
-	running = _eval.read_input(input, _socket, NONE);
+		running = _eval.read_input(input, _socket, NONE);
 }
 
-void *listen_irc(void *dummy) {
+void listen_irc() {
 	while(_socket.IRCConnected() && running)
 		running = _eval.read_input(_socket.listen_irc(), _socket, IRC);
 }
 
 int execute() {
-	pthread_t listen1, listen2;
 	running = true;
 
-	std::cout << "Console started.\n" << std::endl;
+	rlutil::hidecursor();
+	rlutil::setColor(rlutil::GREEN);
+	std::cout << "SCE Console started.\n" << std::endl;
 	
 	while(running) {
-		/* When I replace these w/ C++11 threads instead of pthreads the program
-		 * fails during the sleep functions during the IRC connect function. */
-		pthread_create(&listen1, NULL, listen_console, NULL);
-		pthread_create(&listen2, NULL, listen_irc, NULL);
+		std::thread listen1(listen_console);
+		std::thread listen2(listen_irc);
 
-		pthread_join(listen1, NULL);
+		// Wait for input so's to not loop for no raisin
+		listen1.join();
+		// Detach to allow to run constantly
+		listen2.detach();
 	}
-	
-	pthread_exit(NULL);
+
 	return 0;
 }
 
