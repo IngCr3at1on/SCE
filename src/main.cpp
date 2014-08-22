@@ -35,7 +35,9 @@ static SCESocket _socket;
 void listen_console() {
 	std::string input;
 	rlutil::setColor(rlutil::GREEN);
-	std::cout << "SCE # ";
+	std::cout << "SCE";
+	rlutil::setColor(rlutil::LIGHTGREEN);
+	std::cout << " # ";
 	rlutil::setColor(rlutil::WHITE);
 	rlutil::showcursor();
 	getline(std::cin, input);
@@ -52,7 +54,6 @@ int execute() {
 	running = true;
 
 	rlutil::hidecursor();
-	rlutil::setColor(rlutil::GREEN);
 	std::cout << "SCE Console started.\n" << std::endl;
 	
 	while(running) {

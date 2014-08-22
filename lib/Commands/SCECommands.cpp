@@ -69,7 +69,7 @@ void SCECommands::handle_command(
 	if(command.compare("IRC") == 0) {
 		// Assign a return command.
 		command = handle_irc_command(cmd, origin, user, _socket, sock_type);
-		/* If the return command is empty return true and continue listening
+		/* If the return command is empty return and continue listening
 		 * otherwise process it through our standard command handler (without
 		 * the IRC command type). */
 		if(command.empty()) return;
@@ -194,6 +194,7 @@ void SCECommands::Help(
 	}
 
 	if(sock_type != NONE) {
+		if(dest[0] != '#') dest = user;
 		_socket.IRCSendMsg(dest, msg);
 		return;
 	}

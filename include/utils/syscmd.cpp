@@ -45,6 +45,9 @@ Run a system command, returning the output.
 
 Standard popen function, doesn't really need a license but since I'm sticking it
 in this library...
+
+Consider:
+	Replace with fork and exec?
 *******************************************************************************/
 
 #include <stdio.h>

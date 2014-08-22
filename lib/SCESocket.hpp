@@ -25,9 +25,9 @@ Socket Handling, used to start individual protocol sockets.
 #ifndef _SCESOCKET_H_
 #define _SCESOCKET_H_
 
-#include "../include/IRCSocket/IRCSocket.hpp"
+#include "../include/sircsocket/IRCSocket.hpp"
 
-using namespace simple_irc_socket;
+using namespace sircsocket;
 
 enum socket_type {
 	NONE,

@@ -9,7 +9,6 @@ add_library(SCE
 )
 
 target_link_libraries(SCE
-	SIMPLE_IRC_SOCKET
 	SCE_COMMANDS
 	COMMONUTILS
 )

@@ -53,6 +53,23 @@ bool SCEEval::handle_command(
 	else if(sock_type == IRC && origin[0] == '#')
 		return true;
 
+	if(cmd.compare("exit") == 0 || cmd.compare(".exit") == 0) {
+		if(sock_type != NONE) {
+			if(user.compare(_socket.admin) != 0)
+				_socket.IRCSendMsg(user, admin_only);
+			else
+				_socket.IRCSendMsg(user, "Exit is disabled outside of local terminal.");
+			return true;
+		}
+
+		if(_socket.IRCConnected()) {
+			_socket.IRCQuit("");
+			std::this_thread::sleep_for(std::chrono::milliseconds(1500));
+		}
+
+		return false;
+	}
+
 	if(cmd[0] == '.')
 		// This is a command so remove the '.'
 		cmd.erase(0,1);
@@ -70,23 +87,6 @@ bool SCEEval::handle_command(
 		clip(cmd);
 	else
 		cmd = "";
-
-	if(command.compare("exit") == 0) {
-		if(sock_type != NONE) {
-			if(user.compare(_socket.admin) != 0)
-				_socket.IRCSendMsg(user, admin_only);
-			else
-				_socket.IRCSendMsg(user, "Exit is disabled outside of local terminal.");
-			return true;
-		}
-		
-		if(_socket.IRCConnected()) {
-			_socket.IRCQuit("");
-			std::this_thread::sleep_for(std::chrono::milliseconds(1500));
-		}
-
-		return false;
-	}
 
 	_cmd.handle_command(command, origin, user, _socket, sock_type);
 	return true;

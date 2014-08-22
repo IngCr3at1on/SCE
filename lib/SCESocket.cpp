@@ -31,10 +31,14 @@ Socket handling, used to start individual protocol sockets.
 #include "SCESocket.hpp"
 #include "split.hpp"
 
+#include "../include/rlutil/rlutil.h"
+
 std::string SCESocket::listen_irc() {
 	std::string buffer = _irc.ReceiveData();
 
+	rlutil::setColor(rlutil::GREY);
 	std::cout << buffer << std::endl;
+	rlutil::setColor(rlutil::WHITE);
 
 	std::string input;
 	std::istringstream iss(buffer);
@@ -86,7 +90,9 @@ void SCESocket::IRCDisconnect() {
 bool SCESocket::IRCSend(std::string data) {
 	data.append("\n");
 
+	rlutil::setColor(rlutil::DARKGREY);
 	std::cout << data << std::endl;
+	rlutil::setColor(rlutil::WHITE);
 
 	return _irc.SendData(data.c_str());
 }

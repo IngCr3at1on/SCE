@@ -1,3 +1,6 @@
 [submodule "include/rlutil"]
 	path = include/rlutil
 	url = git@github.com:tapio/rlutil.git
+[submodule "include/sircsocket"]
+	path = include/sircsocket
+	url = git://github.com/IngCr3at1on/sircsocket
