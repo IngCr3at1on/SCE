@@ -32,9 +32,10 @@ Socket handling, used to start individual protocol sockets.
 #include "split.hpp"
 
 #include "../include/rlutil/rlutil.h"
+#include "../include/sircsocket/IRCSocket.hpp"
 
 std::string SCESocket::listen_irc() {
-	std::string buffer = _irc.ReceiveData();
+	std::string buffer = sircsocket::ReceiveData();
 
 	rlutil::setColor(rlutil::GREY);
 	std::cout << buffer << std::endl;
@@ -51,7 +52,7 @@ std::string SCESocket::listen_irc() {
 }
 
 bool SCESocket::Init() {
-	if(_irc.Init()) {
+	if(sircsocket::Init()) {
 		return true;
 	}
 	return false;
@@ -65,7 +66,7 @@ bool SCESocket::irc_connect(char const *host, int port, char const *nick,
 	if(IRCConnected())
 		std::cout << "IRCSocket already connected." << std::endl;
 
-	if(_irc.Connect(host, port)) {
+	if(sircsocket::Connect(host, port)) {
 		std::cout << "Connected to " << host << " on " << port << "."
 		<< std::endl;
 
@@ -76,15 +77,17 @@ bool SCESocket::irc_connect(char const *host, int port, char const *nick,
 			return true;
 		}
 
-		if(_irc.Connected())
-			_irc.Disconnect();
+		if(sircsocket::Connected())
+			sircsocket::Disconnect();
 	}
 	return false;
 }
 
+bool SCESocket::IRCConnected() { return sircsocket::Connected(); }
+
 void SCESocket::IRCDisconnect() {
 	std::cout << "IRCSocket disconnected." << std::endl;
-	_irc.Disconnect();
+	sircsocket::Disconnect();
 }
 
 bool SCESocket::IRCSend(std::string data) {
@@ -94,7 +97,7 @@ bool SCESocket::IRCSend(std::string data) {
 	std::cout << data << std::endl;
 	rlutil::setColor(rlutil::WHITE);
 
-	return _irc.SendData(data.c_str());
+	return sircsocket::SendData(data.c_str());
 }
 
 bool SCESocket::IRCLogin(std::string nick, std::string real) {

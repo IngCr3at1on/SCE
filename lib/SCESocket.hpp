@@ -25,10 +25,6 @@ Socket Handling, used to start individual protocol sockets.
 #ifndef _SCESOCKET_H_
 #define _SCESOCKET_H_
 
-#include "../include/sircsocket/IRCSocket.hpp"
-
-using namespace sircsocket;
-
 enum socket_type {
 	NONE,
 	IRC,
@@ -41,7 +37,7 @@ class SCESocket {
 		}
 
 		bool irc_connect(char const */*host*/, int /*port*/, char const */*nick*/, char const */*real*/);
-		bool IRCConnected() { return _irc.Connected(); }
+		bool IRCConnected();
 		void IRCDisconnect();
 		std::string listen_irc();
 
@@ -54,8 +50,6 @@ class SCESocket {
 		std::string admin;
 
 	private:
-		IRCSocket _irc;
-
 		std::string _nick;
 		std::string _real;
 
