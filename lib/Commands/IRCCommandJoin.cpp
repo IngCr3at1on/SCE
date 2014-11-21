@@ -43,7 +43,7 @@ void IRCCommandJoin::CommandCall(
 
 	if(sock_type != NONE) {
 		std::string dest;
-		if(origin[0] == '#') dest == origin;
+		if(origin[0] == '#') dest = origin;
 		else dest = user;
 
 		if(user.compare(_socket.admin) != 0) {

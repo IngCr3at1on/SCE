@@ -19,30 +19,44 @@ SCE (Smart Chat Entity, pronounced C).
 
 Used for concept testing.
 ********************************************************************************
-Display link to bot source code.
+Leave/part an IRC channel.
 *******************************************************************************/
 
 #include <iostream>
 #include <string>
 
 #include "../SCESocket.hpp"
-#include "SCECommandSource.hpp"
+#include "IRCCommandPart.hpp"
 
-void SCECommandSource::CommandCall(
+void IRCCommandPart::CommandCall(
+	std::string cmd,
 	std::string origin,
 	std::string user,
 	SCESocket& _socket,
 	enum socket_type sock_type
 	)
 {
+	if(!_socket.IRCConnected()) {
+		std::cout << "IRCSocket not connected." << std::endl;
+		return;
+	}
+
 	if(sock_type != NONE) {
 		std::string dest;
 		if(origin[0] == '#') dest = origin;
 		else dest = user;
 
-		_socket.IRCSendMsg(dest, HelpMsg);
+		if(user.compare(_socket.admin) != 0) {
+			_socket.IRCSendMsg(dest, HelpMsg);
+			return;
+		} else if(cmd.empty() || cmd[0] != '#') {
+			_socket.IRCSendMsg(dest, AdmHelpMsg);
+			return;
+		}
+	}
+	if(cmd.empty() || cmd[0] != '#') {
+		std::cout << AdmHelpMsg << std::endl;
 		return;
 	}
-
-	std::cout << HelpMsg << std::endl;
+	_socket.IRCSend("PART "+cmd);
 }

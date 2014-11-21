@@ -116,6 +116,11 @@ std::string SCECommands::handle_irc_command(
 		return cmd = "";
 	}
 
+	if(command.compare("leave") == 0 || command.compare("part") == 0) {
+		_ircpart.CommandCall(cmd, dest, user, _socket, sock_type);
+		return cmd = "";
+	}
+
 	if(command.compare("quit") == 0) {
 		if(sock_type != NONE) {
 			if(user.compare(_socket.admin) != 0) {
@@ -132,13 +137,12 @@ std::string SCECommands::handle_irc_command(
 
 void SCECommands::Help(
 	std::string cmd,
-	std::string dest,
+	std::string origin,
 	std::string user,
 	SCESocket& _socket,
 	enum socket_type sock_type
 	)
 {
-	bool valid = false;
 	std::string admin_only = "This command is for admins only.";
 	std::string not_understanding = "I'm afraid I don't understand"; 
 	/* Chop the end off of our command for a more assured match on
@@ -151,6 +155,8 @@ void SCECommands::Help(
 		cmd = "";
 
 	std::string msg;
+
+	bool valid = false;
 
 	if(command.empty()) {
 		valid = true;
@@ -183,6 +189,14 @@ void SCECommands::Help(
 			else
 				msg = _ircjoin.HelpMsg;
 		}
+
+		if(cmd.compare("leave") == 0 || cmd.compare("part") == 0) {
+			if(user.compare(_socket.admin) == 0 || sock_type == NONE)
+				msg = _ircpart.AdmHelpMsg;
+			else
+				msg = _ircpart.HelpMsg;
+		}
+
 		if(cmd.compare("quit") == 0) {
 			if(user.compare(_socket.admin) == 0 || sock_type == NONE)
 				msg = "Quit IRC with an optional message, usage: quit <message>";
@@ -196,8 +210,7 @@ void SCECommands::Help(
 	}
 
 	if(sock_type != NONE) {
-		if(dest[0] != '#') dest = user;
-		_socket.IRCSendMsg(dest, msg);
+		_socket.IRCSendMsg(user, msg);
 		return;
 	}
 	std::cout << msg << std::endl;
