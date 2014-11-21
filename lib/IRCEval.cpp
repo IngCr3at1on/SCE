@@ -70,7 +70,8 @@ IRCMessage IRCEval::Parse(std::string data, SCESocket& _socket) {
 	}
 
 	if(command == "ERROR") {
-		std::cout << original << std::endl;
+		/* This is already being passed to the terminal so no need to repeat it
+		 * here. */
 		_socket.IRCDisconnect();
 	}
 

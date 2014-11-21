@@ -64,7 +64,7 @@ bool SCEEval::handle_command(
 
 		if(_socket.IRCConnected()) {
 			_socket.IRCQuit("");
-			std::this_thread::sleep_for(std::chrono::milliseconds(1500));
+			std::this_thread::sleep_for(std::chrono::milliseconds(3000));
 		}
 
 		return false;
@@ -73,22 +73,16 @@ bool SCEEval::handle_command(
 	if(cmd[0] == '.')
 		// This is a command so remove the '.'
 		cmd.erase(0,1);
+
 	else {
 		if(sock_type == NONE)
-			_cmd.handle_command(cmd, origin, user, _socket, sock_type);
+			goto finish_handle_command;
 
 		return true;
 	}
 
-	/* Chop the end off of our command for a more assured match on
-	 * non-argumental commands. */
-	std::string command = cmd.substr(0, cmd.find(" "));
-	if(cmd.find(" ") != std::string::npos)
-		clip(cmd);
-	else
-		cmd = "";
-
-	_cmd.handle_command(command, origin, user, _socket, sock_type);
+finish_handle_command:
+	_cmd.handle_command(cmd, origin, user, _socket, sock_type);
 	return true;
 }
 

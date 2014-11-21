@@ -23,6 +23,8 @@ SCECommands, manage all commands (for all sockets) from within here.
 *******************************************************************************/
 
 #include <iostream>
+#include <sys/wait.h>
+#include <unistd.h>
 
 #include "../SCESocket.hpp"
 #include "SCECommands.hpp"
