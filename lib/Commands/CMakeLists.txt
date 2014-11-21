@@ -4,5 +4,6 @@ add_library(SCE_COMMANDS
 	IRCCommandPart.cpp
 	SCECommands.cpp
 	SCECommandCLI.cpp
+	SCECommandEightball.cpp
 	SCECommandSource.cpp
 )

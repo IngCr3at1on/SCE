@@ -19,30 +19,23 @@ SCE (Smart Chat Entity, pronounced C).
 
 Used for concept testing.
 ********************************************************************************
-SCECommands, manage all commands (non-socket specific) from within here.
+Ask the magic eightball a question.
 *******************************************************************************/
 
-#ifndef _SCECOMMANDS_H_
-#define _SCECOMMANDS_H_
+#ifndef _SCECOMMAND_EIGHTBALL_H_
+#define _SCECOMMAND_EIGHTBALL_H_
+
+#include <vector>
 
 #include "SCECommand.hpp"
-#include "SCECommandCLI.hpp"
-#include "SCECommandEightball.hpp"
-#include "SCECommandSource.hpp"
 
-#include "IRCCommandJoin.hpp"
-#include "IRCCommandPart.hpp"
-
-class SCECommands : public SCECommand {
+class SCECommandEightball : public SCECommand {
 	public:
-		SCECommands() {
-			HelpMsg = "No user commands at this time.";
-			AdmHelpMsg = "Current supported commands are:\nNon-group commands: cli, source.\nIRC command group: join, part, quit.";
-			ConsoleHelpMsg = "connect and exit.";
+		SCECommandEightball() {
+			HelpMsg = "Ask the magic eightball a question.";
 		}
-
-		void handle_command(
-			std::string /*cmd*/,
+		// Main call for all SCECommands.
+		void CommandCall(
 			std::string /*origin*/,
 			std::string /*user*/,
 			SCESocket& /*_socket*/,
@@ -50,30 +43,7 @@ class SCECommands : public SCECommand {
 		);
 
 	private:
-		std::string ConsoleHelpMsg;
-
-		std::string handle_irc_command(
-			std::string /*cmd*/,
-			std::string /*dest*/,
-			std::string /*user*/,
-			SCESocket& /*_socket*/,
-			enum socket_type /*sock_type*/
-		);
-
-		void Help(
-			std::string /*cmd*/,
-			std::string /*origin*/,
-			std::string /*user*/,
-			SCESocket& /*_socket*/,
-			enum socket_type /*sock_type*/
-		);
-
-		SCECommandCLI _cmdcli;
-		SCECommandEightball _cmd8ball;
-		SCECommandSource _cmdsrc;
-
-		IRCCommandJoin _ircjoin;
-		IRCCommandPart _ircpart;
+		std::string get_responses(std::vector<std::string> /*vec*/);
 };
 
-#endif // _SCECOMMANDS_H_
+#endif // _SCECOMMAND_EIGHTBALL_H_

@@ -61,6 +61,11 @@ void SCECommands::handle_command(
 		cmd = "";
 
 	// Keep in alpha!
+	if(command.compare("8ball") == 0 || command.compare("eightball") == 0) {
+		_cmd8ball.CommandCall(origin, user, _socket, sock_type);
+		return;
+	}
+
 	if(command.compare("cli") == 0) {
 		_cmdcli.CommandCall(origin, user, _socket, sock_type);
 		return;
@@ -166,6 +171,11 @@ void SCECommands::Help(
 	if(command.empty()) {
 		valid = true;
 		msg = "What would you like assistance with, commands perhaps?";
+	}
+
+	if(command.compare("8ball") == 0 || command.compare("eightball") == 0) {
+		valid = true;
+		msg = _cmd8ball.HelpMsg;
 	}
 
 	if(command.compare("cli") == 0) {
