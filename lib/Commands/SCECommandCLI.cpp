@@ -19,16 +19,16 @@ SCE (Smart Chat Entity, pronounced C).
 
 Used for concept testing.
 ********************************************************************************
-Display link to bot source code.
+Display link to handy CLI cheatsheet.
 *******************************************************************************/
 
 #include <iostream>
 #include <string>
 
 #include "../SCESocket.hpp"
-#include "SCECommandSource.hpp"
+#include "SCECommandCLI.hpp"
 
-void SCECommandSource::CommandCall(
+void SCECommandCLI::CommandCall(
 	std::string origin,
 	std::string user,
 	SCESocket& _socket,

@@ -61,6 +61,11 @@ void SCECommands::handle_command(
 		cmd = "";
 
 	// Keep in alpha!
+	if(command.compare("cli") == 0) {
+		_cmdcli.CommandCall(origin, user, _socket, sock_type);
+		return;
+	}
+
 	if(command.compare("connect") == 0) {
 		if(sock_type == NONE)
 			_socket.irc_connect(host, port, nick, real);
@@ -163,6 +168,11 @@ void SCECommands::Help(
 		msg = "What would you like assistance with, commands perhaps?";
 	}
 
+	if(command.compare("cli") == 0) {
+		valid = true;
+		msg = _cmdcli.HelpMsg;
+	}
+
 	if(command.compare("commands") == 0) {
 		valid = true;
 		msg = HelpMsg;
@@ -203,6 +213,11 @@ void SCECommands::Help(
 			else
 				msg = admin_only;
 		}
+	}
+
+	if(command.compare("source") == 0) {
+		valid = true;
+		msg = _cmdsrc.HelpMsg;
 	}
 
 	if(!command.empty() && !valid) {

@@ -30,7 +30,8 @@ Display link to bot source code.
 class SCECommandSource : public SCECommand {
 	public:
 		SCECommandSource() {
-			HelpMsg = "https://github.com/IngCr3at1on/SCE";
+			HelpMsg = "Display link to bot source code.";
+			AdmHelpMsg = "https://github.com/IngCr3at1on/SCE";
 		}
 		// Main call for all SCECommands.
 		void CommandCall(
