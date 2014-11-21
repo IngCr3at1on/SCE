@@ -29,7 +29,7 @@ Socket handling, used to start individual protocol sockets.
 #include <vector>
 
 #include "SCESocket.hpp"
-#include "split.hpp"
+#include "InternalCommands/split.hpp"
 
 #include "../include/rlutil/rlutil.h"
 #include "../include/sircsocket/IRCSocket.hpp"

@@ -29,7 +29,7 @@ IRCMessage structure.
 #include <string>
 #include <vector>
 
-#include "split.hpp"
+#include "InternalCommands/split.hpp"
 
 struct IRCCommandPrefix {
 	void Parse(std::string data) {
