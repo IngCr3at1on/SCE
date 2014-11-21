@@ -14,7 +14,7 @@ license requirements of the aforementioned IRCClient.
 
 ---
 
-This project uses git-modules initialize these and update with:
+This project uses git submodules initialize these and update with:
 
 	git submodule init
 	git submodule update
