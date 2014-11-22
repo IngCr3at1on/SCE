@@ -6,6 +6,8 @@ add_library(SCE
 	IRCEval.cpp
 	SCEEval.cpp
 	SCESocket.cpp
+	SCESocketHandler.cpp
+	SCESocketIRC.cpp
 )
 
 target_link_libraries(SCE

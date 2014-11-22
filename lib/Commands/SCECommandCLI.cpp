@@ -40,7 +40,7 @@ void SCECommandCLI::CommandCall(
 		if(origin[0] == '#') dest = origin;
 		else dest = user;
 
-		_socket.IRCSendMsg(dest, AdmHelpMsg);
+		_socket.SendMsg(dest, AdmHelpMsg);
 		return;
 	}
 

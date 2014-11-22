@@ -25,6 +25,8 @@ SCECommands, manage all commands (non-socket specific) from within here.
 #ifndef _SCECOMMANDS_H_
 #define _SCECOMMANDS_H_
 
+#include "../SCESocketHandler.hpp"
+
 #include "SCECommand.hpp"
 #include "SCECommandCLI.hpp"
 #include "SCECommandEightball.hpp"
@@ -67,6 +69,8 @@ class SCECommands : public SCECommand {
 			SCESocket& /*_socket*/,
 			enum socket_type /*sock_type*/
 		);
+
+		SCESocketHandler Handler;
 
 		SCECommandCLI _cmdcli;
 		SCECommandEightball _cmd8ball;

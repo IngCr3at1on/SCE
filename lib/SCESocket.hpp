@@ -19,7 +19,7 @@ SCE (Smart Chat Entity, pronounced C).
 
 Used for concept testing.
 ********************************************************************************
-Socket Handling, used to start individual protocol sockets.
+SCESocket: used as the base class for socker handler and all sub-sockets.
 *******************************************************************************/
 
 #ifndef _SCESOCKET_H_
@@ -35,25 +35,19 @@ class SCESocket {
 		SCESocket() {
 			admin = "IngCr3at1on";
 		}
+		virtual bool Init();
+		virtual bool Connect();
+		virtual bool Connected();
+		virtual void Disconnect();
+		virtual std::string Listen();
 
-		bool irc_connect(char const */*host*/, int /*port*/, char const */*nick*/, char const */*real*/);
-		bool IRCConnected();
-		void IRCDisconnect();
-		std::string listen_irc();
+		virtual bool SendRaw(std::string /*data*/);
+		virtual bool SendMsg(std::string /*dest*/, std::string /*message*/);
 
-		bool IRCSend(std::string /*data*/);
-		bool IRCSendMsg(std::string /*dest*/, std::string /*content*/);
-
-		bool IRCLogin(std::string /*nick*/, std::string /*real*/);
-		bool IRCQuit(std::string /*msg*/);
+		virtual bool Login();
+		virtual bool Quit(std::string /*msg*/);
 
 		std::string admin;
-
-	private:
-		std::string _nick;
-		std::string _real;
-
-		bool Init();
 };
 
 #endif // _SCESOCKET_H_

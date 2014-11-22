@@ -19,44 +19,57 @@ SCE (Smart Chat Entity, pronounced C).
 
 Used for concept testing.
 ********************************************************************************
-Ask the magic eightball a question.
+Socket handling, used to start individual protocol sockets.
 *******************************************************************************/
 
-#include <cstdlib>
 #include <iostream>
+#include <sstream>
 #include <string>
+#include <thread>
+#include <vector>
 
-#include "../SCESocket.hpp"
-#include "SCECommandEightball.hpp"
+#include "SCESocketHandler.hpp"
 
-std::string SCECommandEightball::get_responses(std::vector<std::string> vec) {
-	int rind = rand() % vec.size();
-	return vec[rind];
-}
+#include "InternalCommands/split.hpp"
 
-void SCECommandEightball::CommandCall(
-	std::string origin,
-	std::string user,
-	SCESocket& _socket,
-	enum socket_type sock_type
-	)
-{
-	std::vector<std::string> responses;
-	responses.push_back("It is certain.");
-	responses.push_back("Unlikely");
-	responses.push_back("It is uncertain");
-	responses.push_back("Signs point to yes.");
-	responses.push_back("Try again later.");
-	std::string msg = get_responses(responses);
+#include "../include/rlutil/rlutil.h"
 
-	if(sock_type != NONE) {
-		std::string dest;
-		if(origin[0] == '#') dest = origin;
-		else dest = user;
+std::string SCESocketHandler::Listen() {
+	std::string irc_buffer = _freenode.Listen();
 
-		_socket.SendMsg(dest, msg);
-		return;
+	rlutil::setColor(rlutil::GREY);
+	std::cout << irc_buffer << std::endl;
+	rlutil::setColor(rlutil::WHITE);
+
+	std::string input;
+	std::istringstream iss(irc_buffer);
+	if(getline(iss, input)) {
+		if(input.find("\r") != std::string::npos)
+			input = input.substr(0, input.size() - 1);
 	}
 
-	std::cout << msg << std::endl;
+	return input;
+}
+
+bool SCESocketHandler::Connect(SCESocket& socket) {
+	if(socket.Init())
+		return false;
+
+	if(socket.Connected())
+		return false;
+
+	if(!socket.Connect())
+		return false;
+}
+
+bool SCESocketHandler::Connected(SCESocket& socket) { return socket.Connected(); }
+
+void SCESocketHandler::Disconnect(SCESocket& socket) { socket.Disconnect(); }
+
+bool SCESocketHandler::Quit(SCESocket& socket) {
+	if(socket.Connected()) {
+		socket.Disconnect();
+	}
+
+	return true;
 }

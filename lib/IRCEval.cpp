@@ -72,11 +72,11 @@ IRCMessage IRCEval::Parse(std::string data, SCESocket& _socket) {
 	if(command == "ERROR") {
 		/* This is already being passed to the terminal so no need to repeat it
 		 * here. */
-		_socket.IRCDisconnect();
+		_socket.Disconnect();
 	}
 
 	if(command == "PING")
-		_socket.IRCSend("PONG :" + parameters.at(0));
+		_socket.SendRaw("PONG :" + parameters.at(0));
 
 	IRCMessage ircMessage(command, cmdPrefix, parameters);
 

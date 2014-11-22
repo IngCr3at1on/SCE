@@ -19,44 +19,31 @@ SCE (Smart Chat Entity, pronounced C).
 
 Used for concept testing.
 ********************************************************************************
-Ask the magic eightball a question.
+Socket Handler, inherits SCESocket and is used to start all sub sockets.
 *******************************************************************************/
 
-#include <cstdlib>
-#include <iostream>
-#include <string>
+#ifndef _SCESOCKETHANDLER_H_
+#define _SCESOCKETHANDLER_H_
 
-#include "../SCESocket.hpp"
-#include "SCECommandEightball.hpp"
+#include "SCESocket.hpp"
+#include "SCESocketHandler.hpp"
+#include "SCESocketIRC.hpp"
 
-std::string SCECommandEightball::get_responses(std::vector<std::string> vec) {
-	int rind = rand() % vec.size();
-	return vec[rind];
-}
+class SCESocketHandler : public SCESocket {
+	public:
+		bool Connect(SCESocket& /*socket*/);
+		bool Connected(SCESocket& /*socket*/);
+		void Disconnect(SCESocket& /*socket*/);
+		std::string Listen();
 
-void SCECommandEightball::CommandCall(
-	std::string origin,
-	std::string user,
-	SCESocket& _socket,
-	enum socket_type sock_type
-	)
-{
-	std::vector<std::string> responses;
-	responses.push_back("It is certain.");
-	responses.push_back("Unlikely");
-	responses.push_back("It is uncertain");
-	responses.push_back("Signs point to yes.");
-	responses.push_back("Try again later.");
-	std::string msg = get_responses(responses);
+		bool Quit(SCESocket& /*socket*/);
 
-	if(sock_type != NONE) {
-		std::string dest;
-		if(origin[0] == '#') dest = origin;
-		else dest = user;
+		/* We can use a different socket for a different network, track by
+		 * network name for ease. */
+		SCESocketIRC _freenode;
 
-		_socket.SendMsg(dest, msg);
-		return;
-	}
+	private:
+		bool Init(SCESocket& /*socket*/);
+};
 
-	std::cout << msg << std::endl;
-}
+#endif // _SCESOCKETHANDLER_H_

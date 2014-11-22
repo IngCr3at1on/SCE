@@ -36,7 +36,7 @@ void IRCCommandPart::CommandCall(
 	enum socket_type sock_type
 	)
 {
-	if(!_socket.IRCConnected()) {
+	if(!_socket.Connected()) {
 		std::cout << "IRCSocket not connected." << std::endl;
 		return;
 	}
@@ -47,10 +47,10 @@ void IRCCommandPart::CommandCall(
 		else dest = user;
 
 		if(user.compare(_socket.admin) != 0) {
-			_socket.IRCSendMsg(dest, HelpMsg);
+			_socket.SendMsg(dest, HelpMsg);
 			return;
 		} else if(cmd.empty() || cmd[0] != '#') {
-			_socket.IRCSendMsg(dest, AdmHelpMsg);
+			_socket.SendMsg(dest, AdmHelpMsg);
 			return;
 		}
 	}
@@ -58,5 +58,5 @@ void IRCCommandPart::CommandCall(
 		std::cout << AdmHelpMsg << std::endl;
 		return;
 	}
-	_socket.IRCSend("PART "+cmd);
+	_socket.SendRaw("PART "+cmd);
 }

@@ -19,114 +19,20 @@ SCE (Smart Chat Entity, pronounced C).
 
 Used for concept testing.
 ********************************************************************************
-Socket handling, used to start individual protocol sockets.
+SCESocket: used as the base class for socker handler and all sub-sockets.
 *******************************************************************************/
 
-#include <iostream>
-#include <sstream>
 #include <string>
-#include <thread>
-#include <vector>
 
 #include "SCESocket.hpp"
-#include "InternalCommands/split.hpp"
 
-#include "../include/rlutil/rlutil.h"
-#include "../include/sircsocket/IRCSocket.hpp"
-
-std::string SCESocket::listen_irc() {
-	std::string buffer = sircsocket::ReceiveData();
-
-	rlutil::setColor(rlutil::GREY);
-	std::cout << buffer << std::endl;
-	rlutil::setColor(rlutil::WHITE);
-
-	std::string input;
-	std::istringstream iss(buffer);
-	if(getline(iss, input)) {
-		if(input.find("\r") != std::string::npos)
-			input = input.substr(0, input.size() - 1);
-	}
-
-	return input;
-}
-
-bool SCESocket::Init() {
-	if(sircsocket::Init()) {
-		return true;
-	}
-	return false;
-}
-
-bool SCESocket::irc_connect(char const *host, int port, char const *nick,
-	char const *real) {
-	if(!Init())
-		std::cout << "Unable to initialize Socket." << std::endl;
-
-	if(IRCConnected())
-		std::cout << "IRCSocket already connected." << std::endl;
-
-	if(sircsocket::Connect(host, port)) {
-		std::cout << "Connected to " << host << " on " << port << "."
-		<< std::endl;
-
-		std::this_thread::sleep_for(std::chrono::seconds(3));
-
-		if(IRCLogin(nick, real)) {
-			std::this_thread::sleep_for(std::chrono::seconds(9));
-			return true;
-		}
-
-		if(sircsocket::Connected())
-			sircsocket::Disconnect();
-	}
-	return false;
-}
-
-bool SCESocket::IRCConnected() { return sircsocket::Connected(); }
-
-void SCESocket::IRCDisconnect() {
-	std::cout << "IRCSocket disconnected." << std::endl;
-	sircsocket::Disconnect();
-}
-
-bool SCESocket::IRCSend(std::string data) {
-	data.append("\n");
-
-	rlutil::setColor(rlutil::DARKGREY);
-	std::cout << data << std::endl;
-	rlutil::setColor(rlutil::WHITE);
-
-	return sircsocket::SendData(data.c_str());
-}
-
-bool SCESocket::IRCLogin(std::string nick, std::string real) {
-	_nick = nick;
-	_real = real;
-
-	if(IRCSend("NICK " + nick))
-		if(IRCSend("USER " + nick + " 8 * :" + real))
-			return true;
-		
-	return false;
-}
-
-bool SCESocket::IRCQuit(std::string msg) {
-	if(!IRCConnected())
-		std::cout << "IRCSocket not connected." << std::endl;
-
-	else {
-		if(msg.empty()) msg = "goodbye.";
-		IRCSend("QUIT :"+msg);
-		IRCDisconnect();
-	}
-
-	return true;
-}
-
-bool SCESocket::IRCSendMsg(std::string dest, std::string content) {
-	std::vector<std::string> lines = split(content, '\n');
-	int s = lines.size();
-	for(int i = 0; i < s; i++)
-		IRCSend("PRIVMSG " + dest + " :" + lines.at(i));
-}
+// Virtual functions, do absolutely nothing.
+bool SCESocket::Init() {}
+bool SCESocket::Connect() {}
+bool SCESocket::Connected() {}
+void SCESocket::Disconnect() {}
+std::string SCESocket::Listen() {}
+bool SCESocket::SendRaw(std::string data) {}
+bool SCESocket::SendMsg(std::string dest, std::string message) {}
+bool SCESocket::Login() {}
+bool SCESocket::Quit(std::string msg) {}

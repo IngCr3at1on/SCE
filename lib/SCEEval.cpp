@@ -56,14 +56,14 @@ bool SCEEval::handle_command(
 	if(cmd.compare("exit") == 0 || cmd.compare(".exit") == 0) {
 		if(sock_type != NONE) {
 			if(user.compare(_socket.admin) != 0)
-				_socket.IRCSendMsg(user, admin_only);
+				_socket.SendMsg(user, admin_only);
 			else
-				_socket.IRCSendMsg(user, "Exit is disabled outside of local terminal.");
+				_socket.SendMsg(user, "Exit is disabled outside of local terminal.");
 			return true;
 		}
 
-		if(_socket.IRCConnected()) {
-			_socket.IRCQuit("");
+		if(_socket.Connected()) {
+			_socket.Quit("");
 			std::this_thread::sleep_for(std::chrono::milliseconds(3000));
 		}
 

@@ -24,13 +24,13 @@ Used for concept testing.
 #include <thread>
 
 #include "../lib/SCEEval.hpp"
-#include "../lib/SCESocket.hpp"
+#include "../lib/SCESocketHandler.hpp"
 
 #include "../include/rlutil/rlutil.h"
 
 static bool running;
-static SCEEval _eval;
-static SCESocket _socket;
+static SCEEval Eval;
+static SCESocketHandler Handler;
 
 void listen_console() {
 	std::string input;
@@ -41,13 +41,15 @@ void listen_console() {
 	rlutil::setColor(rlutil::WHITE);
 	rlutil::showcursor();
 	getline(std::cin, input);
+
+	SCESocket empty_socket;
 	if(!input.empty())
-		running = _eval.read_input(input, _socket, NONE);
+		running = Eval.read_input(input, empty_socket, NONE);
 }
 
-void listen_irc() {
-	while(_socket.IRCConnected() && running)
-		running = _eval.read_input(_socket.listen_irc(), _socket, IRC);
+void listen_freenode() {
+	while(Handler._freenode.Connected() && running)
+		running = Eval.read_input(Handler._freenode.Listen(), Handler._freenode, IRC);
 }
 
 int execute() {
@@ -57,13 +59,13 @@ int execute() {
 	std::cout << "SCE Console started.\n" << std::endl;
 	
 	while(running) {
-		std::thread listen1(listen_console);
-		std::thread listen2(listen_irc);
+		std::thread listen(listen_console);
+		std::thread listen_irc_freenode(listen_freenode);
 
 		// Wait for input so's to not loop for no raisin
-		listen1.join();
+		listen.join();
 		// Detach to allow to run constantly
-		listen2.detach();
+		listen_irc_freenode.detach();
 	}
 
 	return 0;

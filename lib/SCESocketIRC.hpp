@@ -19,44 +19,34 @@ SCE (Smart Chat Entity, pronounced C).
 
 Used for concept testing.
 ********************************************************************************
-Ask the magic eightball a question.
+SCESocketIRC, inherits SCESocket.hpp
 *******************************************************************************/
 
-#include <cstdlib>
-#include <iostream>
-#include <string>
+#ifndef _SCESOCKETIRC_H_
+#define _SCESOCKETIRC_H_
 
-#include "../SCESocket.hpp"
-#include "SCECommandEightball.hpp"
+#include "SCESocket.hpp"
 
-std::string SCECommandEightball::get_responses(std::vector<std::string> vec) {
-	int rind = rand() % vec.size();
-	return vec[rind];
-}
+class SCESocketIRC : public SCESocket  {
+	public:
+		bool Connect();
+		bool Connected();
+		void Disconnect();
+		std::string Listen();
 
-void SCECommandEightball::CommandCall(
-	std::string origin,
-	std::string user,
-	SCESocket& _socket,
-	enum socket_type sock_type
-	)
-{
-	std::vector<std::string> responses;
-	responses.push_back("It is certain.");
-	responses.push_back("Unlikely");
-	responses.push_back("It is uncertain");
-	responses.push_back("Signs point to yes.");
-	responses.push_back("Try again later.");
-	std::string msg = get_responses(responses);
+		bool SendRaw(std::string /*data*/);
+		bool SendMsg(std::string /*dest*/, std::string /*content*/);
 
-	if(sock_type != NONE) {
-		std::string dest;
-		if(origin[0] == '#') dest = origin;
-		else dest = user;
+		bool Login(std::string /*nick*/, std::string /*real*/);
+		bool Quit(std::string /*msg*/);
 
-		_socket.SendMsg(dest, msg);
-		return;
-	}
+		socket_type type;
 
-	std::cout << msg << std::endl;
-}
+	private:
+		bool Init();
+
+		std::string _nick;
+		std::string _real;
+};
+
+#endif // _SCESOCKETIRC_H_

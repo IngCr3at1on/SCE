@@ -26,18 +26,10 @@ SCECommands, manage all commands (for all sockets) from within here.
 #include <sys/wait.h>
 #include <unistd.h>
 
-#include "../SCESocket.hpp"
 #include "SCECommands.hpp"
 
 #include "../../include/utils/clip.hpp"
 #include "../../include/rlutil/rlutil.h"
-
-// These will be removed.
-const char *nick = "sce";
-const char *real = "SCE, Smart Chat Entity";
-const char *host = "irc.freenode.org";
-
-int port = 6667;
 
 void SCECommands::handle_command(
 	std::string cmd,
@@ -68,13 +60,6 @@ void SCECommands::handle_command(
 
 	if(command.compare("cli") == 0) {
 		_cmdcli.CommandCall(origin, user, _socket, sock_type);
-		return;
-	}
-
-	if(command.compare("connect") == 0) {
-		if(sock_type == NONE)
-			_socket.irc_connect(host, port, nick, real);
-		
 		return;
 	}
 
@@ -121,24 +106,40 @@ std::string SCECommands::handle_irc_command(
 		cmd = "";
 
 		// Keep in alpha!
+	if(command.compare("connect") == 0) {
+		if(sock_type == NONE)
+			Handler._freenode.Connect();
+		
+		return cmd = "";
+	}
+
 	if(command.compare("join") == 0) {
-		_ircjoin.CommandCall(cmd, dest, user, _socket, sock_type);
+		if(sock_type == NONE)
+			_ircjoin.CommandCall(cmd, dest, user, Handler._freenode, sock_type);
+		else
+			_ircjoin.CommandCall(cmd, dest, user, _socket, sock_type);
 		return cmd = "";
 	}
 
 	if(command.compare("leave") == 0 || command.compare("part") == 0) {
-		_ircpart.CommandCall(cmd, dest, user, _socket, sock_type);
+		if(sock_type == NONE)
+			_ircpart.CommandCall(cmd, dest, user, Handler._freenode, sock_type);
+		else
+			_ircpart.CommandCall(cmd, dest, user, _socket, sock_type);
 		return cmd = "";
 	}
 
 	if(command.compare("quit") == 0) {
 		if(sock_type != NONE) {
 			if(user.compare(_socket.admin) != 0) {
-				_socket.IRCSendMsg(user, admin_only);
+				_socket.SendMsg(user, admin_only);
 				return cmd = "";
 			}
 		}
-		_socket.IRCQuit(cmd);
+		if(sock_type == NONE)
+			Handler._freenode.Quit(cmd);
+		else
+			_socket.Quit(cmd);
 		return cmd = "";
 	}
 
@@ -235,7 +236,7 @@ void SCECommands::Help(
 	}
 
 	if(sock_type != NONE) {
-		_socket.IRCSendMsg(user, msg);
+		_socket.SendMsg(user, msg);
 		return;
 	}
 	std::cout << msg << std::endl;
