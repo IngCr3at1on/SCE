@@ -31,7 +31,7 @@ SCECommands, manage all commands (for all sockets) from within here.
 #include "../../include/utils/clip.hpp"
 #include "../../include/rlutil/rlutil.h"
 
-void SCECommands::handle_command(
+bool SCECommands::handle_command(
 	std::string cmd,
 	std::string origin,
 	std::string user,
@@ -55,22 +55,22 @@ void SCECommands::handle_command(
 	// Keep in alpha!
 	if(command.compare("8ball") == 0 || command.compare("eightball") == 0) {
 		_cmd8ball.CommandCall(origin, user, _socket, sock_type);
-		return;
+		return true;
 	}
 
 	if(command.compare("cli") == 0) {
 		_cmdcli.CommandCall(origin, user, _socket, sock_type);
-		return;
+		return true;
 	}
 
 	if(command.compare("help") == 0) {
 		Help(cmd, origin, user, _socket, sock_type);
-		return;
+		return true;
 	}
 
 	if(command.compare("source") == 0) {
 		_cmdsrc.CommandCall(origin, user, _socket, sock_type);
-		return;
+		return true;
 	}
 
 	// Process group commands after generic.
@@ -87,13 +87,10 @@ void SCECommands::handle_command(
 		/* If the return command is empty return and continue listening
 		 * otherwise process it through our standard command handler (without
 		 * the IRC command type). */
-		if(command.empty()) return;
+		if(command.empty()) return true;
 	}
 
-	if(sock_type == NONE)
-		std::cout << "Invalid command '" << original << "'.\n" << std::endl;
-
-	Help(cmd, origin, user, _socket, sock_type);
+	return false;
 }
 
 std::string SCECommands::handle_irc_command(

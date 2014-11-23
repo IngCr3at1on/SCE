@@ -19,37 +19,18 @@ SCE (Smart Chat Entity, pronounced C).
 
 Used for concept testing.
 ********************************************************************************
-SCESocket: used as the base class for socker handler and all sub-sockets.
+Brain, used to process conversational data after it has been reviewed by eval
+(for command regonition).
 *******************************************************************************/
 
-#ifndef _SCESOCKET_H_
-#define _SCESOCKET_H_
+#include <iostream>
+#include <string>
 
-enum socket_type {
-	NONE,
-	IRC,
-};
+#include "SCEBrain.hpp"
 
-class SCESocket {
-	public:
-		SCESocket() {
-			admin = "IngCr3at1on";
-			type = NONE;
-		}
-		virtual bool Init();
-		virtual bool Connect();
-		virtual bool Connected();
-		virtual void Disconnect();
-		virtual std::string Listen();
-
-		virtual bool SendRaw(std::string /*data*/);
-		virtual bool SendMsg(std::string /*dest*/, std::string /*message*/);
-
-		virtual bool Login();
-		virtual bool Quit(std::string /*msg*/);
-
-		std::string admin;
-		socket_type type;
-};
-
-#endif // _SCESOCKET_H_
+/* This should use chunking and a dictionary, for now do nothing outside of
+ * local terminal. */
+void SCEBrain::handle_speech(std::string data, std::string origin, std::string user, SCESocket& _socket) {
+	if(_socket.type == NONE)
+		std::cout << "Handle speach called, no speech recognition at this time." << std::endl;
+}

@@ -51,7 +51,7 @@ bool SCEEval::handle_command(
 	if(cmd[0] == 's' && cmd[1] == 'c' && cmd[2] == 'e')
 		cmd.erase(0,3);
 	else if(sock_type == IRC && origin[0] == '#')
-		return true;
+		goto finish_handle_speech;
 
 	if(cmd.compare("exit") == 0 || cmd.compare(".exit") == 0) {
 		if(sock_type != NONE) {
@@ -74,15 +74,22 @@ bool SCEEval::handle_command(
 		// This is a command so remove the '.'
 		cmd.erase(0,1);
 
-	else {
-		if(sock_type == NONE)
-			goto finish_handle_command;
+	/* No command designation has been provided so assume this is either speech
+	 * or not meant for SCE. */
+	else if(sock_type != NONE)
+		goto finish_handle_speech;
 
+	// If our command returns true return without evaluating speach.
+	if(_cmd.handle_command(cmd, origin, user, _socket, sock_type) == true)
 		return true;
-	}
 
-finish_handle_command:
-	_cmd.handle_command(cmd, origin, user, _socket, sock_type);
+finish_handle_speech:
+	// Only handle speech in designated channels.
+	if(sock_type == IRC && (origin[0] == '#' && origin.compare("#projectopencannibal") != 0))
+		return true;
+
+	// Handle speech, always return true afterwards to continue listening.
+	Brain.handle_speech(cmd, origin, user, _socket);
 	return true;
 }
 

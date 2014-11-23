@@ -4,6 +4,7 @@ add_subdirectory(InternalCommands)
 add_library(SCE
 	SHARED
 	IRCEval.cpp
+	SCEBrain.cpp
 	SCEEval.cpp
 	SCESocket.cpp
 	SCESocketHandler.cpp

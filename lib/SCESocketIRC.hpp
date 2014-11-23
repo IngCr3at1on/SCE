@@ -29,6 +29,9 @@ SCESocketIRC, inherits SCESocket.hpp
 
 class SCESocketIRC : public SCESocket  {
 	public:
+		SCESocketIRC() {
+			type = IRC;
+		}
 		bool Connect();
 		bool Connected();
 		void Disconnect();
@@ -39,8 +42,6 @@ class SCESocketIRC : public SCESocket  {
 
 		bool Login(std::string /*nick*/, std::string /*real*/);
 		bool Quit(std::string /*msg*/);
-
-		socket_type type;
 
 	private:
 		bool Init();

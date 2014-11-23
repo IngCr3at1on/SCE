@@ -43,7 +43,7 @@ class SCECommands : public SCECommand {
 			ConsoleHelpMsg = "connect and exit.";
 		}
 
-		void handle_command(
+		bool handle_command(
 			std::string /*cmd*/,
 			std::string /*origin*/,
 			std::string /*user*/,

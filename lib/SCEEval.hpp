@@ -26,6 +26,7 @@ command or part of a conversation.
 #ifndef _SCEEVAL_H_
 #define _SCEEVAL_H_
 
+#include "SCEBrain.hpp"
 #include "SCESocket.hpp"
 #include "IRCEval.hpp"
 
@@ -43,6 +44,7 @@ class SCEEval {
 			SCESocket& /*_socket*/, 
 			enum socket_type /*sock_type*/
 		);
+		SCEBrain Brain;
 		IRCEval _irceval;
 		SCECommands _cmd;
 
