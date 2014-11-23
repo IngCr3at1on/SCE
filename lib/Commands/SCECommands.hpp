@@ -39,7 +39,7 @@ class SCECommands : public SCECommand {
 	public:
 		SCECommands() {
 			HelpMsg = "No user commands at this time.";
-			AdmHelpMsg = "Current supported commands are:\nNon-group commands: cli, source.\nIRC command group: join, part, quit.";
+			AdmHelpMsg = "Current supported commands are:\nNon-group commands: cli, 8ball, source.\nIRC command group: join, part, quit.";
 			ConsoleHelpMsg = "connect and exit.";
 		}
 

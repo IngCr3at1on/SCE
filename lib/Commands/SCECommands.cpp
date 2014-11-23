@@ -63,15 +63,6 @@ void SCECommands::handle_command(
 		return;
 	}
 
-	if(command.compare("IRC") == 0) {
-		// Assign a return command.
-		command = handle_irc_command(cmd, origin, user, _socket, sock_type);
-		/* If the return command is empty return and continue listening
-		 * otherwise process it through our standard command handler (without
-		 * the IRC command type). */
-		if(command.empty()) return;
-	}
-
 	if(command.compare("help") == 0) {
 		Help(cmd, origin, user, _socket, sock_type);
 		return;
@@ -82,10 +73,27 @@ void SCECommands::handle_command(
 		return;
 	}
 
-	else if(sock_type == NONE) {
-		std::cout << "Invalid command '" << original << "'.\n" << std::endl;
-		Help("", "", "", _socket, sock_type);
+	// Process group commands after generic.
+	if(command.compare("IRC") == 0 || sock_type == IRC) {
+		/* Treat all (non generic) commands passed on the IRC socket as IRC
+		 * commands unless otherwise specified (Hipchat, JIM, etc (not sure
+		 * this will quite work right when I add more sockets, needs further
+		 * testing, consider first draft)). */
+		if(command.compare("IRC") != 0)
+			command = handle_irc_command(command+" "+cmd, origin, user, _socket, sock_type);
+		else
+			command = handle_irc_command(cmd, origin, user, _socket, sock_type);
+
+		/* If the return command is empty return and continue listening
+		 * otherwise process it through our standard command handler (without
+		 * the IRC command type). */
+		if(command.empty()) return;
 	}
+
+	if(sock_type == NONE)
+		std::cout << "Invalid command '" << original << "'.\n" << std::endl;
+
+	Help(cmd, origin, user, _socket, sock_type);
 }
 
 std::string SCECommands::handle_irc_command(
@@ -102,8 +110,6 @@ std::string SCECommands::handle_irc_command(
 	std::string command = cmd.substr(0, cmd.find(" "));
 	if(cmd.find(" ") != std::string::npos)
 		clip(cmd);
-	else
-		cmd = "";
 
 		// Keep in alpha!
 	if(command.compare("connect") == 0) {
@@ -169,7 +175,7 @@ void SCECommands::Help(
 
 	bool valid = false;
 
-	if(command.empty()) {
+	if(command.empty() || command.compare("me") == 0) {
 		valid = true;
 		msg = "What would you like assistance with, commands perhaps?";
 	}
@@ -191,20 +197,25 @@ void SCECommands::Help(
 		if(sock_type == NONE) msg += "\n"+ConsoleHelpMsg;
 	}
 
-	if(command.compare("connect") == 0) {
-		valid = true;
-		if(sock_type == NONE)
-			msg = "Connect to IRC.";
-		else
-			msg = not_understanding + ", a connection is already open.";
-	}
+	if(command.compare("IRC") == 0 || (sock_type == IRC && !command.empty())) {
+		if(command.compare("IRC") != 0)
+			cmd = command;
 
-	if(command.compare("IRC") == 0) {
-		valid = true;
-		if(cmd.empty())
+		if(cmd.empty()) {
+			valid = true;
 			msg = "Command group, IRC:\nUsed to preface IRC specific commands.";
+		}
+
+		if(command.compare("connect") == 0) {
+			valid = true;
+			if(sock_type == NONE)
+				msg = "Connect to IRC.";
+			else
+				msg = not_understanding + ", a connection is already open.";
+		}
 
 		if(cmd.compare("join") == 0) {
+			valid = true;
 			if(user.compare(_socket.admin) == 0 || sock_type == NONE)
 				msg = _ircjoin.AdmHelpMsg;
 			else
@@ -212,6 +223,7 @@ void SCECommands::Help(
 		}
 
 		if(cmd.compare("leave") == 0 || cmd.compare("part") == 0) {
+			valid = true;
 			if(user.compare(_socket.admin) == 0 || sock_type == NONE)
 				msg = _ircpart.AdmHelpMsg;
 			else
@@ -219,6 +231,7 @@ void SCECommands::Help(
 		}
 
 		if(cmd.compare("quit") == 0) {
+			valid = true;
 			if(user.compare(_socket.admin) == 0 || sock_type == NONE)
 				msg = "Quit IRC with an optional message, usage: quit <message>";
 			else
