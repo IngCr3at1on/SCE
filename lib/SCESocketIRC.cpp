@@ -27,13 +27,13 @@ SCESocketIRC, inherits SCESocket.hpp
 #include <string>
 #include <thread>
 #include <vector>
-
+// Lib files
 #include "SCESocket.hpp"
 #include "SCESocketIRC.hpp"
 #include "InternalCommands/split.hpp"
-
-#include "../include/rlutil/rlutil.h"
-#include "../include/sircsocket/IRCSocket.hpp"
+// Include files
+#include "rlutil/rlutil.h"
+#include "sircsocket/IRCSocket.hpp"
 
 const char *nick = "sce";
 const char *real = "SCE, Smart Chat Entity";

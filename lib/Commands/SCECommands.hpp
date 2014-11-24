@@ -24,9 +24,9 @@ SCECommands, manage all commands (non-socket specific) from within here.
 
 #ifndef _SCECOMMANDS_H_
 #define _SCECOMMANDS_H_
-
-#include "../SCESocketHandler.hpp"
-
+// Lib files
+#include "SCESocketHandler.hpp"
+// Native files
 #include "SCECommand.hpp"
 #include "SCECommandCLI.hpp"
 #include "SCECommandEightball.hpp"

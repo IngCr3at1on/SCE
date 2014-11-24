@@ -25,8 +25,9 @@ Ask the magic eightball a question.
 #include <cstdlib>
 #include <iostream>
 #include <string>
-
-#include "../SCESocket.hpp"
+// Lib files
+#include "SCESocket.hpp"
+// Native files
 #include "SCECommandEightball.hpp"
 
 std::string SCECommandEightball::get_responses(std::vector<std::string> vec) {

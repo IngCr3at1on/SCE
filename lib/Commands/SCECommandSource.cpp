@@ -24,8 +24,9 @@ Display link to bot source code.
 
 #include <iostream>
 #include <string>
-
-#include "../SCESocket.hpp"
+// Lib files
+#include "SCESocket.hpp"
+// Native files
 #include "SCECommandSource.hpp"
 
 void SCECommandSource::CommandCall(

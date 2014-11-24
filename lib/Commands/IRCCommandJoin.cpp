@@ -24,8 +24,9 @@ Join an IRC channel.
 
 #include <iostream>
 #include <string>
-
-#include "../SCESocket.hpp"
+// Lib files
+#include "SCESocket.hpp"
+// Native files
 #include "IRCCommandJoin.hpp"
 
 void IRCCommandJoin::CommandCall(

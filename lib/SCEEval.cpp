@@ -27,9 +27,10 @@ command or part of a conversation.
 #include <iostream>
 #include <string>
 #include <thread>
-
+// Native files
 #include "SCEEval.hpp"
-#include "../include/utils/utils.hpp"
+// Include files
+#include "utils/utils.hpp"
 
 bool SCEEval::read_input(std::string data, SCESocket& _socket, enum socket_type sock_type) {
 	if(sock_type == IRC)

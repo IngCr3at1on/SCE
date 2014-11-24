@@ -24,8 +24,9 @@ Leave/part an IRC channel.
 
 #include <iostream>
 #include <string>
-
-#include "../SCESocket.hpp"
+// Lib files
+#include "SCESocket.hpp"
+// Native files
 #include "IRCCommandPart.hpp"
 
 void IRCCommandPart::CommandCall(

@@ -27,12 +27,11 @@ Socket handling, used to start individual protocol sockets.
 #include <string>
 #include <thread>
 #include <vector>
-
+// Lib files
 #include "SCESocketHandler.hpp"
-
 #include "InternalCommands/split.hpp"
-
-#include "../include/rlutil/rlutil.h"
+// Include files
+#include "rlutil/rlutil.h"
 
 std::string SCESocketHandler::Listen() {
 	std::string irc_buffer = _freenode.Listen();

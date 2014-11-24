@@ -22,11 +22,11 @@ Used for concept testing.
 
 #include <iostream>
 #include <thread>
-
-#include "../lib/SCEEval.hpp"
-#include "../lib/SCESocketHandler.hpp"
-
-#include "../include/rlutil/rlutil.h"
+// Lib files
+#include "SCEEval.hpp"
+#include "SCESocketHandler.hpp"
+// Include files
+#include "rlutil/rlutil.h"
 
 static bool running;
 static SCEEval Eval;

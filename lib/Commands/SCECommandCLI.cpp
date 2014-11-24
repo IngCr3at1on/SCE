@@ -24,8 +24,9 @@ Display link to handy CLI cheatsheet.
 
 #include <iostream>
 #include <string>
-
-#include "../SCESocket.hpp"
+// Lib files
+#include "SCESocket.hpp"
+// Native files
 #include "SCECommandCLI.hpp"
 
 void SCECommandCLI::CommandCall(

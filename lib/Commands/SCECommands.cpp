@@ -25,11 +25,11 @@ SCECommands, manage all commands (for all sockets) from within here.
 #include <iostream>
 #include <sys/wait.h>
 #include <unistd.h>
-
+// Native files
 #include "SCECommands.hpp"
-
-#include "../../include/utils/clip.hpp"
-#include "../../include/rlutil/rlutil.h"
+// Include files
+#include "utils/clip.hpp"
+#include "rlutil/rlutil.h"
 
 bool SCECommands::handle_command(
 	std::string cmd,
